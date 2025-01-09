@@ -1,5 +1,5 @@
-## CrypticLibExample
+## CustomCommand
 
 ### 简介
 
-基于CrypticLib的模板项目，```gradle build```进行构建
+自定义命令插件,可以执行动作链
