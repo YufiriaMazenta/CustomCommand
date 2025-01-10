@@ -7,9 +7,11 @@ import crypticlib.lifecycle.AutoTask;
 import crypticlib.lifecycle.BukkitLifeCycleTask;
 import crypticlib.lifecycle.LifeCycle;
 import crypticlib.lifecycle.TaskRule;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Collections;
@@ -32,7 +34,6 @@ public enum CustomCommandManager implements BukkitLifeCycleTask {
         }
         commandConfig.reloadConfig();
         YamlConfiguration config = commandConfig.config();
-        System.out.println(config.saveToString());
         for (String key : config.getKeys(false)) {
             try {
                 ConfigurationSection commandConfig = config.getConfigurationSection(key);
@@ -43,6 +44,7 @@ public enum CustomCommandManager implements BukkitLifeCycleTask {
                 throwable.printStackTrace();
             }
         }
+        BukkitCommandManager.INSTANCE.syncCommands();
     }
 
     public void unregisterAllCustomCommands() {
@@ -61,8 +63,10 @@ public enum CustomCommandManager implements BukkitLifeCycleTask {
     public void run(Plugin plugin, LifeCycle lifeCycle) {
         try {
             reloadCommands();
+            Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
         } catch (Throwable throwable) {
             unregisterAllCustomCommands();
+            BukkitCommandManager.INSTANCE.syncCommands();
             throwable.printStackTrace();
         }
     }
