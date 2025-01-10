@@ -40,7 +40,11 @@
 
 `runIf {condition:"条件",action:"满足条件时执行的动作",condition_type:"条件类型"}`满足某条件时执行指定动作
 
+
+
 #### 注意事项
 
-1. 自定义命令执行的动作中若为玩家执行,会解析指定玩家的placeholderapi变量
+1. 自定义命令执行的动作中若为玩家执行,会解析指定玩家的PlaceholderAPI变量
 2. 动作command需要有玩家作为执行载体,若为控制台执行,将会报错
+3. runIf条件类型为可选项,默认为解析PlaceholderAPI变量
+4. 条件类型目前只支持`placeholderapi`
