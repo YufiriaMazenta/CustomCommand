@@ -49,8 +49,7 @@ public enum CustomCommandManager implements BukkitLifeCycleTask {
 
     public void unregisterAllCustomCommands() {
         customCommands.forEach((name, command) -> {
-            Command unregister = BukkitCommandManager.INSTANCE.unregister(name);
-            BukkitMsgSender.INSTANCE.info("unregistered command: " + (unregister == null ? "null" : unregister.getName()));
+            BukkitCommandManager.INSTANCE.unregister(name);
         });
         customCommands.clear();
     }
