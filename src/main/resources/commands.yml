@@ -4,4 +4,4 @@ example:
   permission: customcommand.example
   actions:
     - 'runIf {condition:"%player_is_op%",action:"console say hello world"}'
-    - 'console me <arg_0>'
+    - 'console me <arg_0> <arg_1>'
