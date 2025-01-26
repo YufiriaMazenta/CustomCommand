@@ -2,6 +2,7 @@ package pers.yufiria.customCommand;
 
 import crypticlib.action.Action;
 import crypticlib.action.ActionCompiler;
+import crypticlib.chat.BukkitMsgSender;
 import crypticlib.command.BukkitCommand;
 import crypticlib.command.CommandInfo;
 import crypticlib.perm.PermInfo;
@@ -9,23 +10,32 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomCommand extends BukkitCommand {
 
-    private final Action action;
     private static final Pattern ARG_PATTERN = Pattern.compile("<arg_(\\d+)>");
 
-    public CustomCommand(String name, String permission, List<String> aliases, Action action) {
+    private final Action action;
+    private final Integer cooldownTick;
+    private final @Nullable String cooldownMessage;
+    private final Map<UUID, Long> playerLastExecuteMap = new ConcurrentHashMap<>();
+    private Long consoleLastExecuteTime = 0L;
+
+    public CustomCommand(String name, String permission, List<String> aliases, Action action, Integer cooldownTick, String cooldownMessage) {
         super(CommandInfo.builder(name).permission(new PermInfo(permission)).aliases(aliases).build());
         this.action = action;
+        this.cooldownTick = cooldownTick;
+        this.cooldownMessage = cooldownMessage;
     }
 
     @Override
@@ -51,9 +61,24 @@ public class CustomCommand extends BukkitCommand {
             matcher.appendTail(result);
             return result.toString().trim();
         };
+        long current = System.currentTimeMillis();
         if (commandSender instanceof Player player) {
+            UUID playerUniqueId = player.getUniqueId();
+            if (playerLastExecuteMap.containsKey(playerUniqueId)) {
+                Long last = playerLastExecuteMap.get(playerUniqueId);
+                if ((current - last) / 50 < cooldownTick) {
+                    BukkitMsgSender.INSTANCE.sendMsg(player, cooldownMessage);
+                    return;
+                }
+                playerLastExecuteMap.put(playerUniqueId, current);
+            }
             this.action.run(player, PluginMain.INSTANCE, argPreprocessor);
         } else {
+            if ((current - consoleLastExecuteTime) / 50 < cooldownTick) {
+                BukkitMsgSender.INSTANCE.sendMsg(commandSender, cooldownMessage);
+                return;
+            }
+            consoleLastExecuteTime = current;
             this.action.run(null, PluginMain.INSTANCE, argPreprocessor);
         }
     }
@@ -65,7 +90,9 @@ public class CustomCommand extends BukkitCommand {
         String permission = config.getString("permission");
         List<String> actionStrList = config.getStringList("actions");
         Action action = ActionCompiler.INSTANCE.compile(actionStrList);
-        return new CustomCommand(name, permission, aliases, action);
+        int cooldownTick = config.getInt("cooldown", 0);
+        String cooldownMsg = config.getString("cooldown_message");
+        return new CustomCommand(name, permission, aliases, action, cooldownTick, cooldownMsg);
     }
 
 }
