@@ -16,6 +16,8 @@
   aliases: #命令别名
     - '命令别名1'
     - '命令别名2'
+  cooldown: 100 #命令的冷却时间,以tick为单位
+  cooldown_message: '&cexample命令正在冷却中' #命令冷却时的提醒消息,如果没有此项将不会发送消息
   permission: '命令的权限'
   actions: #命令执行的动作
     - 'action1'
