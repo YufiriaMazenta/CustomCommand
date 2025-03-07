@@ -12,10 +12,12 @@ import java.util.function.Function;
 
 public class ActionPack extends BaseAction {
 
-    private final Action action;
     public static final String ACTION_PACK_ACTION_KEY = "action-pack";
+    private final Action action;
+    private final String packId;
 
     public ActionPack(String packId) {
+        this.packId = packId;
         this.action = ActionPacks.INSTANCE.getActionPack(packId);
         if (action == null) {
             IOHelper.info("&eWARN: Unknown action pack: " + packId);
@@ -24,7 +26,7 @@ public class ActionPack extends BaseAction {
 
     @Override
     public String toActionStr() {
-        return ACTION_PACK_ACTION_KEY;
+        return ACTION_PACK_ACTION_KEY + " " + packId;
     }
 
     @Override
