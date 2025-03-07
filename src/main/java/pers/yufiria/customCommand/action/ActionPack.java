@@ -13,6 +13,7 @@ import java.util.function.Function;
 public class ActionPack extends BaseAction {
 
     private final Action action;
+    public static final String ACTION_PACK_ACTION_KEY = "action-pack";
 
     public ActionPack(String packId) {
         this.action = ActionPacks.INSTANCE.getActionPack(packId);
@@ -23,7 +24,7 @@ public class ActionPack extends BaseAction {
 
     @Override
     public String toActionStr() {
-        return "action_pack";
+        return ACTION_PACK_ACTION_KEY;
     }
 
     @Override

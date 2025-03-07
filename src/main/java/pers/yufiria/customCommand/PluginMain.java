@@ -12,7 +12,7 @@ public class PluginMain extends BukkitPlugin {
 
     @Override
     public void load() {
-        ActionCompiler.INSTANCE.regAction("action-pack", ActionPack::new);
+        ActionCompiler.INSTANCE.regAction(ActionPack.ACTION_PACK_ACTION_KEY, ActionPack::new);
     }
 
 }
