@@ -11,11 +11,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.yufiria.customCommand.argument.ArgumentSettings;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -29,13 +27,15 @@ public class CustomCommand extends BukkitCommand {
     private final Integer cooldownTick;
     private final @Nullable String cooldownMessage;
     private final Map<UUID, Long> playerLastExecuteMap = new ConcurrentHashMap<>();
+    private final @Nullable ArgumentSettings argumentSettings;
     private Long consoleLastExecuteTime = 0L;
 
-    public CustomCommand(String name, String permission, List<String> aliases, Action action, Integer cooldownTick, String cooldownMessage) {
+    public CustomCommand(String name, String permission, List<String> aliases, Action action, Integer cooldownTick, @Nullable String cooldownMessage, @Nullable ArgumentSettings argumentSettings) {
         super(CommandInfo.builder(name).permission(new PermInfo(permission)).aliases(aliases).build());
         this.action = action;
         this.cooldownTick = cooldownTick;
         this.cooldownMessage = cooldownMessage;
+        this.argumentSettings = argumentSettings;
     }
 
     @Override
@@ -61,6 +61,13 @@ public class CustomCommand extends BukkitCommand {
             matcher.appendTail(result);
             return result.toString().trim();
         };
+
+        if (argumentSettings != null) {
+            if (!(argumentSettings.checkArguments(commandSender, args))) {
+                return;
+            }
+        }
+
         long current = System.currentTimeMillis();
         if (commandSender instanceof Player player) {
             UUID playerUniqueId = player.getUniqueId();
@@ -92,7 +99,13 @@ public class CustomCommand extends BukkitCommand {
         Action action = ActionCompiler.INSTANCE.compile(actionStrList);
         int cooldownTick = config.getInt("cooldown", 0);
         String cooldownMsg = config.getString("cooldown_message");
-        return new CustomCommand(name, permission, aliases, action, cooldownTick, cooldownMsg);
+        ArgumentSettings argumentSettings;
+        if (config.isConfigurationSection("argument_settings")) {
+            argumentSettings = ArgumentSettings.fromConfig(Objects.requireNonNull(config.getConfigurationSection("argument_settings")));
+        } else {
+            argumentSettings = null;
+        }
+        return new CustomCommand(name, permission, aliases, action, cooldownTick, cooldownMsg, argumentSettings);
     }
 
 }

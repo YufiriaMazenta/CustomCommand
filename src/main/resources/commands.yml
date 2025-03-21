@@ -4,6 +4,19 @@ example:
   permission: customcommand.example
   cooldown: 100 #命令的冷却时间,以tick为单位
   cooldown_message: '&cexample命令正在冷却中'
+  argument_settings: #命令的参数校验设置
+    min_argument:
+      min: 1
+      hint: '&c参数不足'
+    max_argument:
+      max: 1
+      hint: '&c参数过长'
+    type_settings:
+      0:
+        type: number
+        min: 0
+        max: 10
+        hint: '&c%argument%不是一个有效的数字'
   actions:
     - 'runIf {condition:"%player_is_op%",action:"console say hello world",else:"tell &c你没有权限进行此操作"}'
     - 'console me <arg_0> <arg_1>'

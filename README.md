@@ -22,6 +22,19 @@
   actions: #命令执行的动作
     - 'action1'
     - 'action2'
+  argument_settings: #命令的参数校验设置
+    min_argument:
+      min: 1
+      hint: '&c参数不足'
+    max_argument:
+      max: 1
+      hint: '&c参数过长'
+    type_settings:
+      0:
+        type: number
+        min: 0
+        max: 10
+        hint: '&c%argument%不是一个有效的数字'
 ```
 
 #### 命令可用动作
