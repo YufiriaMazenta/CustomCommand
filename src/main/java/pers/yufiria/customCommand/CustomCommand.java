@@ -42,7 +42,7 @@ public class CustomCommand extends BukkitCommand {
     public void execute(@NotNull CommandSender commandSender, @NotNull List<String> args) {
         Function<String, String> argPreprocessor = (arg) -> {
             Matcher matcher = ARG_PATTERN.matcher(arg);
-            StringBuilder result = new StringBuilder();
+            StringBuffer result = new StringBuffer();
             while (matcher.find()) {
                 int index = Integer.parseInt(matcher.group(1));
 
@@ -69,7 +69,8 @@ public class CustomCommand extends BukkitCommand {
         }
 
         long current = System.currentTimeMillis();
-        if (commandSender instanceof Player player) {
+        if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
             UUID playerUniqueId = player.getUniqueId();
             if (playerLastExecuteMap.containsKey(playerUniqueId)) {
                 Long last = playerLastExecuteMap.get(playerUniqueId);

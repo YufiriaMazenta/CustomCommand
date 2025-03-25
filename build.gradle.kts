@@ -6,18 +6,20 @@ plugins {
 
 rootProject.group = rootProject.findProperty("group").toString()
 rootProject.version = rootProject.findProperty("version")!!
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenLocal()
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    //Spigot
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.crypticlib.com:8081/repository/maven-public/")
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:24.0.1")
     implementation("com.crypticlib:bukkit:${rootProject.findProperty("crypticlibVersion")}")
     implementation("com.crypticlib:bukkit-action:${rootProject.findProperty("crypticlibVersion")}")

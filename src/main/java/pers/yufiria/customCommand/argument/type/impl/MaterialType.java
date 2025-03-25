@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import pers.yufiria.customCommand.argument.type.AbstractTypeSetting;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialType extends AbstractTypeSetting {
