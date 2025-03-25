@@ -23,6 +23,21 @@
   actions: #命令执行的动作
     - 'action1'
     - 'action2'
+  tab_completer: #命令的参数补全器,支持list,player_name和material类型
+    1:
+      type: list
+      values:
+        - '0'
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
   argument_settings: #命令的参数校验设置
     min_argument:
       min: 1

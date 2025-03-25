@@ -1,14 +1,17 @@
-package pers.yufiria.customCommand.argument;
+package pers.yufiria.customCommand.core.argument;
 
 import crypticlib.chat.BukkitMsgSender;
 import crypticlib.util.IOHelper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
-import pers.yufiria.customCommand.argument.type.AbstractTypeSetting;
-import pers.yufiria.customCommand.argument.type.TypeSettingsManager;
+import pers.yufiria.customCommand.core.argument.type.AbstractTypeSetting;
+import pers.yufiria.customCommand.core.argument.type.TypeSettingsManager;
+import pers.yufiria.customCommand.core.tab.CommandTabCompleter;
+import pers.yufiria.customCommand.core.tab.TabCompleterManager;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class ArgumentSettings {
 
@@ -16,7 +19,11 @@ public class ArgumentSettings {
     private final @NotNull MinArgument minArgument;
     private final @NotNull Map<Integer, AbstractTypeSetting> typeSettings;
 
-    private ArgumentSettings(@NotNull MaxArgument maxArgument, @NotNull MinArgument minArgument, @NotNull Map<Integer, AbstractTypeSetting> typeSettings) {
+    private ArgumentSettings(
+        @NotNull MaxArgument maxArgument,
+        @NotNull MinArgument minArgument,
+        @NotNull Map<Integer, AbstractTypeSetting> typeSettings
+    ) {
         this.maxArgument = maxArgument;
         this.minArgument = minArgument;
         this.typeSettings = typeSettings;
@@ -70,11 +77,11 @@ public class ArgumentSettings {
         if (config.isConfigurationSection("type_settings")) {
             ConfigurationSection typeSettingsConfig = Objects.requireNonNull(config.getConfigurationSection("type_settings"));
             for (String key : typeSettingsConfig.getKeys(false)) {
-                int index = Integer.parseInt(key);
+                int index = Integer.parseInt(key) - 1;//为了符合非开发者的使用习惯
                 ConfigurationSection typeSettingConfig = Objects.requireNonNull(typeSettingsConfig.getConfigurationSection(key));
                 String typeId = typeSettingConfig.getString("type");
                 Optional<AbstractTypeSetting> typeSettingOpt = TypeSettingsManager.INSTANCE.getTypeSetting(typeId, typeSettingConfig);
-                if (typeSettingOpt.isEmpty()) {
+                if (!typeSettingOpt.isPresent()) {
                     IOHelper.info("&eUnknown argument type: " + typeId);
                     continue;
                 }

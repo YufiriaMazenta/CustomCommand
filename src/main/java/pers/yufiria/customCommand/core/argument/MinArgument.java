@@ -1,4 +1,4 @@
-package pers.yufiria.customCommand.argument;
+package pers.yufiria.customCommand.core.argument;
 
 import org.jetbrains.annotations.Nullable;
 

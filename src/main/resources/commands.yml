@@ -4,7 +4,22 @@ example:
   permission: customcommand.example
   cooldown: 100 #命令的冷却时间,以tick为单位
   cooldown_message: '&cexample命令正在冷却中'
-  argument_settings: #命令的参数校验设置
+  tab_completer:
+    1:
+      type: list
+      values:
+        - '0'
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+  argument_settings: #命令的各种配置
     min_argument:
       min: 1
       hint: '&c参数不足'
@@ -12,7 +27,7 @@ example:
       max: 1
       hint: '&c参数过长'
     type_settings:
-      0:
+      1:
         type: number
         min: 0
         max: 10

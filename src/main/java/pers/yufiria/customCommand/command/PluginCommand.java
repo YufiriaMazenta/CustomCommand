@@ -9,10 +9,11 @@ import crypticlib.command.annotation.Subcommand;
 import crypticlib.perm.PermInfo;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import pers.yufiria.customCommand.CustomCommandManager;
+import pers.yufiria.customCommand.core.CustomCommandManager;
 import pers.yufiria.customCommand.PluginMain;
 import pers.yufiria.customCommand.config.Lang;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class PluginCommand extends BukkitCommand {
             BukkitMsgSender.INSTANCE.sendMsg(
                     commandSender,
                     Lang.commandReload.value(),
-                    Map.of("<num>", CustomCommandManager.INSTANCE.getCustomCommands().size() + "")
+                    Collections.singletonMap("<num>", CustomCommandManager.INSTANCE.getCustomCommands().size() + "")
             );
         }
     };

@@ -1,10 +1,10 @@
-package pers.yufiria.customCommand.argument.type.impl;
+package pers.yufiria.customCommand.core.argument.type.impl;
 
 import crypticlib.util.IOHelper;
 import crypticlib.util.MaterialHelper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import pers.yufiria.customCommand.argument.type.AbstractTypeSetting;
+import pers.yufiria.customCommand.core.argument.type.AbstractTypeSetting;
 
 import java.util.List;
 

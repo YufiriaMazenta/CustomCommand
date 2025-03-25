@@ -1,9 +1,9 @@
-package pers.yufiria.customCommand.argument.type.impl;
+package pers.yufiria.customCommand.core.argument.type.impl;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import pers.yufiria.customCommand.argument.type.AbstractTypeSetting;
+import pers.yufiria.customCommand.core.argument.type.AbstractTypeSetting;
 
 public class PlayerType extends AbstractTypeSetting {
 

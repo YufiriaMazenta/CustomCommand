@@ -1,8 +1,8 @@
-package pers.yufiria.customCommand.argument.type.impl;
+package pers.yufiria.customCommand.core.argument.type.impl;
 
 import crypticlib.util.StringHelper;
 import org.bukkit.configuration.ConfigurationSection;
-import pers.yufiria.customCommand.argument.type.AbstractTypeSetting;
+import pers.yufiria.customCommand.core.argument.type.AbstractTypeSetting;
 
 public class NumberType extends AbstractTypeSetting {
 

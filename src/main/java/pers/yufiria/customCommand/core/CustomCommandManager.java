@@ -1,4 +1,4 @@
-package pers.yufiria.customCommand;
+package pers.yufiria.customCommand.core;
 
 import crypticlib.command.BukkitCommandManager;
 import crypticlib.config.BukkitConfigWrapper;
@@ -11,6 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import pers.yufiria.customCommand.PluginMain;
 
 import java.util.Collections;
 import java.util.Map;

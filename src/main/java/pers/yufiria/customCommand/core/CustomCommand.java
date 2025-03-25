@@ -1,4 +1,4 @@
-package pers.yufiria.customCommand;
+package pers.yufiria.customCommand.core;
 
 import crypticlib.action.Action;
 import crypticlib.action.ActionCompiler;
@@ -6,12 +6,16 @@ import crypticlib.chat.BukkitMsgSender;
 import crypticlib.command.BukkitCommand;
 import crypticlib.command.CommandInfo;
 import crypticlib.perm.PermInfo;
+import crypticlib.util.IOHelper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.yufiria.customCommand.argument.ArgumentSettings;
+import pers.yufiria.customCommand.PluginMain;
+import pers.yufiria.customCommand.core.argument.ArgumentSettings;
+import pers.yufiria.customCommand.core.tab.CommandTabCompleter;
+import pers.yufiria.customCommand.core.tab.TabCompleterManager;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,14 +32,25 @@ public class CustomCommand extends BukkitCommand {
     private final @Nullable String cooldownMessage;
     private final Map<UUID, Long> playerLastExecuteMap = new ConcurrentHashMap<>();
     private final @Nullable ArgumentSettings argumentSettings;
+    private final @NotNull Map<Integer, CommandTabCompleter> tabCompleterMap;
     private Long consoleLastExecuteTime = 0L;
 
-    public CustomCommand(String name, String permission, List<String> aliases, Action action, Integer cooldownTick, @Nullable String cooldownMessage, @Nullable ArgumentSettings argumentSettings) {
+    public CustomCommand(
+        String name,
+        String permission,
+        List<String> aliases,
+        Action action,
+        Integer cooldownTick,
+        @Nullable String cooldownMessage,
+        @Nullable ArgumentSettings argumentSettings,
+        @NotNull Map<Integer, CommandTabCompleter> tabCompleterMap
+    ) {
         super(CommandInfo.builder(name).permission(new PermInfo(permission)).aliases(aliases).build());
         this.action = action;
         this.cooldownTick = cooldownTick;
         this.cooldownMessage = cooldownMessage;
         this.argumentSettings = argumentSettings;
+        this.tabCompleterMap = tabCompleterMap;
     }
 
     @Override
@@ -91,6 +106,15 @@ public class CustomCommand extends BukkitCommand {
         }
     }
 
+    @Override
+    public @Nullable List<String> tab(@NotNull CommandSender sender, @NotNull List<String> args) {
+        CommandTabCompleter commandTabCompleter = tabCompleterMap.get(args.size());
+        if (commandTabCompleter == null) {
+            return Collections.emptyList();
+        }
+        return commandTabCompleter.tabComplete(sender, args);
+    }
+
     public static CustomCommand fromConfig(@NotNull String name, @NotNull ConfigurationSection config)  {
         Objects.requireNonNull(name, "Command's name cannot be null");
         Objects.requireNonNull(config, "Command's config cannot be null");
@@ -106,7 +130,22 @@ public class CustomCommand extends BukkitCommand {
         } else {
             argumentSettings = null;
         }
-        return new CustomCommand(name, permission, aliases, action, cooldownTick, cooldownMsg, argumentSettings);
+        Map<Integer, CommandTabCompleter> tabCompleterMap = new HashMap<>();
+        if (config.isConfigurationSection("tab_completer")) {
+            ConfigurationSection tabCompleterConfig = Objects.requireNonNull(config.getConfigurationSection("tab_completer"));
+            for (String key : tabCompleterConfig.getKeys(false)) {
+                int index = Integer.parseInt(key);
+                ConfigurationSection tabConfig = Objects.requireNonNull(tabCompleterConfig.getConfigurationSection(key));
+                String tabCompleterType = tabConfig.getString("type");
+                Optional<Function<ConfigurationSection, CommandTabCompleter>> commandTabCompleterCreator = TabCompleterManager.INSTANCE.getCommandTabCompleterCreator(tabCompleterType);
+                if (!commandTabCompleterCreator.isPresent()) {
+                    IOHelper.info("&eUnknown argument tab completer type: " + tabCompleterType);
+                    continue;
+                }
+                tabCompleterMap.put(index, commandTabCompleterCreator.get().apply(tabConfig));
+            }
+        }
+        return new CustomCommand(name, permission, aliases, action, cooldownTick, cooldownMsg, argumentSettings, tabCompleterMap);
     }
 
 }

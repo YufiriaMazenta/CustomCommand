@@ -1,9 +1,9 @@
-package pers.yufiria.customCommand.argument.type;
+package pers.yufiria.customCommand.core.argument.type;
 
 import org.bukkit.configuration.ConfigurationSection;
-import pers.yufiria.customCommand.argument.type.impl.MaterialType;
-import pers.yufiria.customCommand.argument.type.impl.NumberType;
-import pers.yufiria.customCommand.argument.type.impl.PlayerType;
+import pers.yufiria.customCommand.core.argument.type.impl.MaterialType;
+import pers.yufiria.customCommand.core.argument.type.impl.NumberType;
+import pers.yufiria.customCommand.core.argument.type.impl.PlayerType;
 
 import java.util.Map;
 import java.util.Optional;
