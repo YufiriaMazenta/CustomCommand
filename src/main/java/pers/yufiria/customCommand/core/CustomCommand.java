@@ -59,12 +59,13 @@ public class CustomCommand extends BukkitCommand {
             Matcher matcher = ARG_PATTERN.matcher(arg);
             StringBuffer result = new StringBuffer();
             while (matcher.find()) {
-                int index = Integer.parseInt(matcher.group(1));
+                //为了方便非开发者理解,索引从1开始
+                int argIndex = Integer.parseInt(matcher.group(1)) - 1;
 
                 // 判断 index 是否在替换列表的范围内
                 String replacement;
-                if (index >= 0 && index < args.size()) {
-                    replacement = args.get(index);
+                if (argIndex >= 0 && argIndex < args.size()) {
+                    replacement = args.get(argIndex);
                 } else {
                     replacement = "";  // 如果超出范围，用空字符串替换
                 }

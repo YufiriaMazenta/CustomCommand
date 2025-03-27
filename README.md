@@ -46,7 +46,7 @@
       max: 1
       hint: '&c参数过长'
     type_settings:
-      0:
+      1:
         type: number
         min: 0
         max: 10
