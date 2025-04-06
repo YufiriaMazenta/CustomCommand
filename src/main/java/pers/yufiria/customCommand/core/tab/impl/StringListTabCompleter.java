@@ -1,6 +1,6 @@
 package pers.yufiria.customCommand.core.tab.impl;
 
-import org.bukkit.command.CommandSender;
+import crypticlib.command.CommandInvoker;
 import org.jetbrains.annotations.NotNull;
 import pers.yufiria.customCommand.core.tab.CommandTabCompleter;
 
@@ -15,7 +15,7 @@ public class StringListTabCompleter implements CommandTabCompleter {
     }
 
     @Override
-    public @NotNull List<String> tabComplete(CommandSender sender, List<String> args) {
+    public @NotNull List<String> tabComplete(CommandInvoker invoker, List<String> args) {
         return completeStrings;
 
     }

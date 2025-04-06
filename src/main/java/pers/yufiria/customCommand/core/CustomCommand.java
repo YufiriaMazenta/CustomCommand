@@ -3,11 +3,11 @@ package pers.yufiria.customCommand.core;
 import crypticlib.action.Action;
 import crypticlib.action.ActionCompiler;
 import crypticlib.chat.BukkitMsgSender;
-import crypticlib.command.BukkitCommand;
 import crypticlib.command.CommandInfo;
+import crypticlib.command.CommandInvoker;
+import crypticlib.command.CommandTree;
 import crypticlib.perm.PermInfo;
 import crypticlib.util.IOHelper;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CustomCommand extends BukkitCommand {
+public class CustomCommand extends CommandTree {
 
     private static final Pattern ARG_PATTERN = Pattern.compile("<arg_(\\d+)>");
 
@@ -53,8 +53,10 @@ public class CustomCommand extends BukkitCommand {
         this.tabCompleterMap = tabCompleterMap;
     }
 
+
+
     @Override
-    public void execute(@NotNull CommandSender commandSender, @NotNull List<String> args) {
+    public void execute(@NotNull CommandInvoker commandInvoker, @NotNull List<String> args) {
         Function<String, String> argPreprocessor = (arg) -> {
             Matcher matcher = ARG_PATTERN.matcher(arg);
             StringBuffer result = new StringBuffer();
@@ -79,14 +81,14 @@ public class CustomCommand extends BukkitCommand {
         };
 
         if (argumentSettings != null) {
-            if (!(argumentSettings.checkArguments(commandSender, args))) {
+            if (!(argumentSettings.checkArguments(commandInvoker, args))) {
                 return;
             }
         }
 
         long current = System.currentTimeMillis();
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
+        if (commandInvoker.isPlayer()) {
+            Player player = (Player) commandInvoker.asPlayer().getPlatformPlayer();
             UUID playerUniqueId = player.getUniqueId();
             if (playerLastExecuteMap.containsKey(playerUniqueId)) {
                 Long last = playerLastExecuteMap.get(playerUniqueId);
@@ -99,7 +101,7 @@ public class CustomCommand extends BukkitCommand {
             this.action.run(player, PluginMain.INSTANCE, argPreprocessor);
         } else {
             if ((current - consoleLastExecuteTime) / 50 < cooldownTick) {
-                BukkitMsgSender.INSTANCE.sendMsg(commandSender, cooldownMessage);
+                commandInvoker.sendMsg(cooldownMessage);
                 return;
             }
             consoleLastExecuteTime = current;
@@ -108,7 +110,7 @@ public class CustomCommand extends BukkitCommand {
     }
 
     @Override
-    public @Nullable List<String> tab(@NotNull CommandSender sender, @NotNull List<String> args) {
+    public @Nullable List<String> tab(@NotNull CommandInvoker sender, @NotNull List<String> args) {
         CommandTabCompleter commandTabCompleter = tabCompleterMap.get(args.size());
         if (commandTabCompleter == null) {
             return Collections.emptyList();

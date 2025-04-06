@@ -1,6 +1,7 @@
 package pers.yufiria.customCommand.core.argument;
 
 import crypticlib.chat.BukkitMsgSender;
+import crypticlib.command.CommandInvoker;
 import crypticlib.util.IOHelper;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,13 +30,13 @@ public class ArgumentSettings {
         this.typeSettings = typeSettings;
     }
 
-    public boolean checkArguments(CommandSender sender, List<String> arguments) {
+    public boolean checkArguments(CommandInvoker invoker, List<String> arguments) {
         if (!maxArgument.checkArgumentLength(arguments)) {
-            BukkitMsgSender.INSTANCE.sendMsg(sender, maxArgument.hint());
+            invoker.sendMsg(maxArgument.hint());
             return false;
         }
         if (!minArgument.checkArgumentLength(arguments)) {
-            BukkitMsgSender.INSTANCE.sendMsg(sender, minArgument.hint());
+            invoker.sendMsg(minArgument.hint());
             return false;
         }
         for (int argumentIndex = 0; argumentIndex < arguments.size(); argumentIndex++) {
@@ -45,7 +46,7 @@ public class ArgumentSettings {
             }
             AbstractTypeSetting typeSetting = typeSettings.get(argumentIndex);
             if (!typeSetting.checkArgument(argument)) {
-                BukkitMsgSender.INSTANCE.sendMsg(sender, typeSetting.hint(), Map.of("%argument%", argument));
+                invoker.sendMsg(typeSetting.hint(), Collections.singletonMap("%argument%", argument));
                 return false;
             }
         }

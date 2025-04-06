@@ -37,7 +37,7 @@ public enum CustomCommandManager implements BukkitLifeCycleTask {
             try {
                 ConfigurationSection commandConfig = config.getConfigurationSection(key);
                 CustomCommand customCommand = CustomCommand.fromConfig(key, Objects.requireNonNull(commandConfig));
-                customCommand.register(PluginMain.INSTANCE);
+                customCommand.register();
                 customCommands.put(key, customCommand);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -58,7 +58,7 @@ public enum CustomCommandManager implements BukkitLifeCycleTask {
     }
 
     @Override
-    public void run(Plugin plugin, LifeCycle lifeCycle) {
+    public void lifecycle(Plugin plugin, LifeCycle lifeCycle) {
         try {
             reloadCommands();
             Bukkit.getOnlinePlayers().forEach(Player::updateCommands);

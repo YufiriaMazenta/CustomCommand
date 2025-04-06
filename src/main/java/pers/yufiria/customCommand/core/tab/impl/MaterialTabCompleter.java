@@ -1,7 +1,7 @@
 package pers.yufiria.customCommand.core.tab.impl;
 
+import crypticlib.command.CommandInvoker;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import pers.yufiria.customCommand.core.tab.CommandTabCompleter;
 
@@ -14,7 +14,7 @@ public enum MaterialTabCompleter implements CommandTabCompleter {
     INSTANCE;
 
     @Override
-    public @NotNull List<String> tabComplete(CommandSender sender, List<String> args) {
+    public @NotNull List<String> tabComplete(CommandInvoker invoker, List<String> args) {
         return Arrays.stream(Material.values()).map(mat -> mat.getKey().toString()).collect(Collectors.toList());
     }
 

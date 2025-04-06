@@ -36,7 +36,7 @@ public enum ActionPacks implements BukkitLifeCycleTask {
     }
 
     @Override
-    public void run(Plugin plugin, LifeCycle lifeCycle) {
+    public void lifecycle(Plugin plugin, LifeCycle lifeCycle) {
         actionPackMap.clear();
         if (actionPacksConfig == null) {
             actionPacksConfig = new BukkitConfigWrapper(PluginMain.INSTANCE, "action_packs.yml");

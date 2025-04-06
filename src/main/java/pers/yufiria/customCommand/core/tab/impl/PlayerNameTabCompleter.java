@@ -1,7 +1,7 @@
 package pers.yufiria.customCommand.core.tab.impl;
 
+import crypticlib.command.CommandInvoker;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import pers.yufiria.customCommand.core.tab.CommandTabCompleter;
@@ -14,7 +14,7 @@ public enum PlayerNameTabCompleter implements CommandTabCompleter {
     INSTANCE;
 
     @Override
-    public @NotNull List<String> tabComplete(CommandSender sender, List<String> args) {
+    public @NotNull List<String> tabComplete(CommandInvoker invoker, List<String> args) {
         return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList());
     }
 
