@@ -41,7 +41,7 @@ public class Teleport extends BaseAction {
     public void run(@Nullable Player player, @NotNull Plugin plugin, @Nullable Function<String, String> function) {
         if (location != null) {
             if (player != null) {
-                CrypticLibBukkit.platformAdapter().teleportEntity(player, location);
+                CrypticLibBukkit.serverAdapter().teleportEntity(player, location);
             }
         }
         runNext(player, plugin, function);
