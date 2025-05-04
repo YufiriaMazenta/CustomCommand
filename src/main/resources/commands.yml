@@ -35,3 +35,6 @@ example:
   actions:
     - 'runIf {condition:"%player_is_op%",action:"console say hello world",else:"tell &c你没有权限进行此操作"}'
     - 'console me <arg_1> <arg_2>'
+looking_entity:
+  actions:
+    - 'tell 正在查看的实体名字: %looking_entity_name%, UUID: %looking_entity_uuid%'

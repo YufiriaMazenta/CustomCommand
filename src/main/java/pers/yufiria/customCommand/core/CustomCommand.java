@@ -9,6 +9,7 @@ import crypticlib.command.CommandTree;
 import crypticlib.perm.PermInfo;
 import crypticlib.util.IOHelper;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +17,7 @@ import pers.yufiria.customCommand.PluginMain;
 import pers.yufiria.customCommand.core.argument.ArgumentSettings;
 import pers.yufiria.customCommand.core.tab.CommandTabCompleter;
 import pers.yufiria.customCommand.core.tab.TabCompleterManager;
+import pers.yufiria.customCommand.util.EntityLookUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,8 +55,6 @@ public class CustomCommand extends CommandTree {
         this.tabCompleterMap = tabCompleterMap;
     }
 
-
-
     @Override
     public void execute(@NotNull CommandInvoker commandInvoker, @NotNull List<String> args) {
         Function<String, String> argPreprocessor = (arg) -> {
@@ -77,7 +77,21 @@ public class CustomCommand extends CommandTree {
             }
 
             matcher.appendTail(result);
-            return result.toString().trim();
+            String resultStr = result.toString().trim();
+
+            //替换参数列表中正在查看的实体的信息
+            if (commandInvoker.isPlayer()) {
+                Optional<Entity> lookingEntityOpt = EntityLookUtil.getLookingEntity((Player) commandInvoker.asPlayer().getPlatformPlayer());
+                if (lookingEntityOpt.isPresent()) {
+                    Entity entity = lookingEntityOpt.get();
+                    resultStr = resultStr.replace("%looking_entity_name%", entity.getName());
+                    resultStr = resultStr.replace("%looking_entity_uuid%", entity.getUniqueId().toString());
+                } else {
+                    resultStr = resultStr.replace("%looking_entity_name%", "Unknown");
+                    resultStr = resultStr.replace("%looking_entity_uuid%", "Unknown");
+                }
+            }
+            return resultStr;
         };
 
         if (argumentSettings != null) {

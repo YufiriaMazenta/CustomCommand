@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:24.0.1")
     implementation("com.crypticlib:bukkit:${rootProject.findProperty("crypticlibVersion")}")
     implementation("com.crypticlib:bukkit-action:${rootProject.findProperty("crypticlibVersion")}")
