@@ -84,11 +84,11 @@ public class CustomCommand extends CommandTree {
                 Optional<Entity> lookingEntityOpt = EntityLookUtil.getLookingEntity((Player) commandInvoker.asPlayer().getPlatformPlayer());
                 if (lookingEntityOpt.isPresent()) {
                     Entity entity = lookingEntityOpt.get();
-                    resultStr = resultStr.replace("%looking_entity_name%", entity.getName());
-                    resultStr = resultStr.replace("%looking_entity_uuid%", entity.getUniqueId().toString());
+                    resultStr = resultStr.replace("<looking_entity_name>", entity.getName());
+                    resultStr = resultStr.replace("<looking_entity_uuid>", entity.getUniqueId().toString());
                 } else {
-                    resultStr = resultStr.replace("%looking_entity_name%", "Unknown");
-                    resultStr = resultStr.replace("%looking_entity_uuid%", "Unknown");
+                    resultStr = resultStr.replace("<looking_entity_name>", "Unknown");
+                    resultStr = resultStr.replace("<looking_entity_uuid>", "Unknown");
                 }
             }
             return resultStr;

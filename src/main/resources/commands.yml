@@ -37,4 +37,4 @@ example:
     - 'console me <arg_1> <arg_2>'
 looking_entity:
   actions:
-    - 'tell 正在查看的实体名字: %looking_entity_name%, UUID: %looking_entity_uuid%'
+    - 'tell 正在查看的实体名字: <looking_entity_name>, UUID: <looking_entity_uuid>'
